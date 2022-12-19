@@ -54,7 +54,7 @@ public:
 			{	
 				int findIndex = Lines[o].Operant.find(KEYWORDTAB[i]);
 				//若該欄字串完全吻合 或是部分字串吻合且下一個字元不為字母 E.G X'&EOR'為真 &EORCK為假
-				if ((Lines[o].Operant == KEYWORDTAB[i])||findIndex != -1 && (findIndex + KEYWORDTAB[i].length())<Lines[o].Operant.length()&&!isalpha(Lines[o].Operant[findIndex + KEYWORDTAB[i].length()])) Lines[o].Operant.replace(Lines[o].Operant.find(KEYWORDTAB[i]), KEYWORDTAB[i].length(), restring);
+				if ((Lines[o].Operant == KEYWORDTAB[i])||findIndex != -1 && ((findIndex + KEYWORDTAB[i].length())==Lines[o].Operant.length()||!isalpha(Lines[o].Operant[findIndex + KEYWORDTAB[i].length()]))) Lines[o].Operant.replace(Lines[o].Operant.find(KEYWORDTAB[i]), KEYWORDTAB[i].length(), restring);
 			}
 		}
 		for (auto L : Lines)DEFoutput << L.Op_code << "\t" << L.Operant << endl;
