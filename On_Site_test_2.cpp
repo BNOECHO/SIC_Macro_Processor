@@ -109,7 +109,8 @@ public:
 				L.Operant.replace(replaceIndex, 2, args[keywordIndex]);
 			}
 			//流水號
-			if (L.Address_label[0] == '$')L.Address_label = "$" + unique_Labels + L.Address_label.substr(1, L.Address_label.length() - 1);
+			if (L.Address_label[0] == '$')
+				L.Address_label = "$" + unique_Labels + L.Address_label.substr(1, L.Address_label.length() - 1);
 			if (L.Operant[0] == '$')L.Operant = "$" + unique_Labels + L.Operant.substr(1, L.Operant.length() - 1);
 
 			if (first)
