@@ -30,10 +30,7 @@ public:
 	vector<string> ARGTAB;
 	vector<string> KEYWORDTAB;//自創
 	vector<SIC_Line> Lines;
-	SIC_MACRO()
-	{
-	};
-	int init_Macro(ofstream &DEFoutput)//回傳巨集行數
+	void init_Macro()//回傳巨集行數
 	{
 		vector<string> parameters;//&開頭為參數名稱
 		string p;
@@ -57,9 +54,7 @@ public:
 				if ((Lines[o].Operant == KEYWORDTAB[i])||findIndex != -1 && ((findIndex + KEYWORDTAB[i].length())==Lines[o].Operant.length()||!isalpha(Lines[o].Operant[findIndex + KEYWORDTAB[i].length()]))) Lines[o].Operant.replace(Lines[o].Operant.find(KEYWORDTAB[i]), KEYWORDTAB[i].length(), restring);
 			}
 		}
-		for (auto L : Lines)DEFoutput << L.Op_code << "\t" << L.Operant << endl;
-
-		return Lines.size();
+		
 	}
 	void extend_Macro(vector<SIC_Line>& target,string head_Address_Label, string operant,map<string,SIC_MACRO> macromap)
 	{
@@ -112,12 +107,6 @@ public:
 				int replaceIndex = L.Operant.find("?");
 				int keywordIndex = L.Operant[replaceIndex + 1] - '0';
 				L.Operant.replace(replaceIndex, 2, args[keywordIndex]);
-			}
-			if (L.Address_label.find("?") != -1)
-			{
-				int replaceIndex = L.Address_label.find("?");
-				int keywordIndex = L.Address_label[replaceIndex + 1] - '0';
-				L.Address_label.replace(replaceIndex, 2, args[keywordIndex]);
 			}
 			//流水號
 			if (L.Address_label[0] == '$')L.Address_label = "$" + unique_Labels + L.Address_label.substr(1, L.Address_label.length() - 1);
@@ -178,15 +167,16 @@ public:
 			{
 				target_Macro.push(Line.Address_label);//將目標MACRO放入堆疊
 				vector<string> parameters;
-
 				Macros[Line.Address_label] = SIC_MACRO();
 				Macros[target_Macro.top()].Lines.push_back(Line);//輸入首行
 			}
 			else if (Line.Op_code == "MEND")
 			{
-				NAMTAB << target_Macro.top() << "," << DEFLine << ",";
 				Macros[target_Macro.top()].Lines.push_back(Line);//輸入尾行
-				DEFLine+=Macros[target_Macro.top()].init_Macro(DEFTAB);
+				Macros[target_Macro.top()].init_Macro();
+				NAMTAB << target_Macro.top() << "," << DEFLine << ",";
+				DEFLine += Macros[target_Macro.top()].Lines.size();
+				for (auto L : Macros[target_Macro.top()].Lines)DEFTAB << L.Op_code << "\t" << L.Operant << endl;
 				NAMTAB << DEFLine - 2 << endl;
 				target_Macro.pop();
 			}
