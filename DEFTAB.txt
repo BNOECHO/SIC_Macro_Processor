@@ -8,7 +8,7 @@ IF	(&EORCK EQ 1)
 LDCH	=X'?3'
 RMO	A,S
 ENDIF	
-+LDT	#&MAXLTH
++LDT	#?4
 TD	=X'?0'
 JEQ	$LOOP
 RD	=X'?0'
